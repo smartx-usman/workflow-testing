@@ -76,7 +76,6 @@ jobs:
             --no_shed_install \
             --engine external_galaxy \
             --test_output "$workflow_file_name_no_ext"_output.html \
-            --summary compact \
             "$workflow"
           done < files_changed.txt
 
