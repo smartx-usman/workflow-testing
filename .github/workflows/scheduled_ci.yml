@@ -39,8 +39,8 @@ jobs:
       - name: Install wheel
         run: pip3 install wheel
 
-      - name: Install wheel
-        run: pip3 install wheel
+      - name: Install setuptools
+        run: pip3 install setuptools
 
       - name: Install planemo
         run: pip3 install planemo
