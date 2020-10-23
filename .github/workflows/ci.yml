@@ -46,6 +46,9 @@ jobs:
       - name: Install planemo
         run: pip3 install planemo
 
+      - name: Planemo version
+        run: planemo --version
+
       - name: Set commit range (push to the main branch, e.g. merge)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: echo "COMMIT_RANGE=${{ github.event.before }}.." >> $GITHUB_ENV
@@ -72,6 +75,14 @@ jobs:
             workflow_file_name=`basename "$workflow"`
             workflow_file_name_no_ext=`basename -s .ga "$workflow_file_name"`
             echo "$workflow_file_name $workflow_file_name_no_ext"
+            planemo test \
+            --history_name "$workflow_file_name_no_ext" \
+            --galaxy_url ${{ secrets.GALAXY_URL }} \
+            --galaxy_user_key ${{ secrets.GALAXY_USER_KEY }} \
+            --no_shed_install \
+            --engine external_galaxy \
+            --test_output "$workflow_file_name_no_ext"_output.html \
+            "$workflow"
           done < files_changed.txt
 
       - name: List repo files
