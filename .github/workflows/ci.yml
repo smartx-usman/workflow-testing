@@ -13,7 +13,7 @@ on:
 jobs:
   setup:
     name: Setup cache and test workflow
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [ '3.x' ]
@@ -41,10 +41,10 @@ jobs:
           key: pip_cache_gxy_testing_workflow
 
       - name: Install setuptools and wheels
-        run: pip3 install setuptools wheel
+        run: pip install setuptools wheel
 
       - name: Install planemo
-        run: pip3 install planemo
+        run: pip install planemo
 
       - name: Planemo version
         run: planemo --version
