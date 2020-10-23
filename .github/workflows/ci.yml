@@ -40,8 +40,8 @@ jobs:
           path: ~/.cache/pip
           key: pip_cache_gxy_testing_workflow
 
-      - name: Install setuptools
-        run: pip3 install setuptools
+      - name: Install setuptools and wheels
+        run: pip3 install setuptools wheel
 
       - name: Install planemo
         run: pip3 install planemo
@@ -55,7 +55,9 @@ jobs:
         run: echo "COMMIT_RANGE=HEAD~.." >> $GITHUB_ENV
 
       - name: List of files changed in this commit
-        run: git diff $COMMIT_RANGE --color=never --name-only -- '*.ga' '*-test.yml' | sed 's/-test.yml/.ga/' | uniq > files_changed.txt
+        run: |
+          git diff $COMMIT_RANGE --color=never --name-only -- '*.ga' '*-test.yml' | sed 's/-test.yml/.ga/' | uniq > files_changed.txt
+          find files_changed.txt -size 0 -delete
 
       - name: Check wheter change file is created
         id: files_changed_exists
