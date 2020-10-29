@@ -43,7 +43,7 @@ jobs:
           key: pip_cache_gxy_testing_workflow
 
       - name: Install setuptools and wheels
-        run: pip3 install setuptools wheel
+        run: pip3 install setuptools
 
       - name: Install planemo
         run: pip3 install planemo
@@ -55,18 +55,6 @@ jobs:
       - name: Set commit range (pull request)
         if: github.event_name == 'pull_request'
         run: echo "COMMIT_RANGE=HEAD~.." >> $GITHUB_ENV
-
-      - name: YAML linting
-        uses: karancode/yamllint-github-action@master
-        with:
-          yamllint_file_or_dir: .
-          yamllint_strict: false
-          yamllint_comment: true
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: YAML linting artifacts
-          path: yamllint_output
 
       - name: List of files changed in this commit
         run: |
@@ -81,6 +69,7 @@ jobs:
 
       - name: Run workflows tests on UMSA Galaxy
         if: steps.files_changed_exists.outputs.files_exists == 'true'
+        #continue-on-error: true
         run: |
           while read workflow; do
             workflow_file_name=`basename "$workflow"`
@@ -92,7 +81,8 @@ jobs:
             --no_shed_install \
             --engine external_galaxy \
             --test_output "$workflow_file_name_no_ext"_output.html \
-            "$workflow"
+            "$workflow" || continue
+
           done < files_changed.txt
 
       - name: List repo files

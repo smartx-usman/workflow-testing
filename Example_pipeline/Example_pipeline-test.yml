@@ -11,6 +11,6 @@
       path: https://github.com/RECETOX/workflow-test-data/raw/main/Example_pipeline/input.h5
   outputs:
     output_filtered_rt:
-      file: filtered_rt.h5
+      file: filtered_rt.h56
       compare: sim_size
-      delta: 900
+      delta: 1000
