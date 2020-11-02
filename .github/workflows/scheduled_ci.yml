@@ -3,7 +3,7 @@ name: Weekly workflow testing
 on:
   schedule:
     # Run at midnight every saturday
-    - cron: '15 8 * * 1'
+    - cron: '25 9 * * 1'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel.
 jobs:
@@ -43,6 +43,19 @@ jobs:
 
       - name: Install planemo
         run: pip3 install planemo
+
+      - uses: microsoft/variable-substitution@v1
+        with:
+          files: 'galaxy-instance.json'
+        env:
+          galaxy_url: ${{ secrets.GALAXY_URL }}
+          user_api_key: ${{ secrets.GALAXY_USER_KEY }}
+
+      - name: Cat json file
+        run: cat galaxy-instance.json
+
+      - name: Purge user histories in Galaxy
+        run: python delete_user_history.py
 
       - name: Run workflows tests on UMSA Galaxy
         run: |
