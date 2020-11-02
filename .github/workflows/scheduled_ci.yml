@@ -3,7 +3,7 @@ name: Weekly workflow testing
 on:
   schedule:
     # Run at midnight every saturday
-    - cron: '0 1 * * 6'
+    - cron: '50 8 * * 1'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel.
 jobs:
@@ -38,15 +38,15 @@ jobs:
           path: ~/.cache/pip
           key: pip_cache_gxy_testing_workflow
 
-      - name: Install setuptools and wheel
-        run: pip3 install setuptools wheel
+      - name: Install setuptools
+        run: pip3 install setuptools
 
       - name: Install planemo
         run: pip3 install planemo
 
       - name: Run workflows tests on UMSA Galaxy
         run: |
-          for worflow in $(find . -name '*-test.yml' | sed 's/-test.yml/.ga/' | sort); do
+          for workflow in $(find . -name '*-test.yml' | sed 's/-test.yml/.ga/' | sort); do
             workflow_file_name=`basename "$workflow"`
             workflow_file_name_no_ext=`basename -s .ga "$workflow_file_name"`
             planemo test \
@@ -56,7 +56,7 @@ jobs:
             --no_shed_install \
             --engine external_galaxy \
             --test_output "$workflow_file_name_no_ext"_output.html \
-            "$worflow"
+            "$workflow" || continue
           done
 
       - name: List repo files

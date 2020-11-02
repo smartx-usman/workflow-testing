@@ -42,7 +42,7 @@ jobs:
           path: ~/.cache/pip
           key: pip_cache_gxy_testing_workflow
 
-      - name: Install setuptools and wheels
+      - name: Install setuptools
         run: pip3 install setuptools
 
       - name: Install planemo
